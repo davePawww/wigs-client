@@ -35,9 +35,6 @@ export default function ResetPassword() {
 
   const onSubmit = async (values: z.infer<typeof resetPasswordSchema>) => {
     try {
-      // create dispatch here
-      // reroute to login after successful password reset
-      // add a toast
       if (!token) {
         throw new Error("Token not found");
       }

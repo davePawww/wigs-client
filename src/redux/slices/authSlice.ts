@@ -81,8 +81,8 @@ export const resetPassword = createAsyncThunk(
     { rejectWithValue },
   ) => {
     return postApi(
-      "/auth/reset-password",
-      { password, token },
+      `/auth/reset-password/${token}`,
+      { password },
       rejectWithValue,
     );
   },
