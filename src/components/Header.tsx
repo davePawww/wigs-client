@@ -30,7 +30,7 @@ export default function Header() {
     <header className="flex items-center justify-between bg-neutral-800 p-4 text-white md:px-8">
       <div className="mx-auto flex w-full max-w-5xl items-center justify-between">
         <div>
-          <h1>[appName]</h1>
+          <h1>WIGS</h1>
         </div>
         <Button
           variant={"default"}

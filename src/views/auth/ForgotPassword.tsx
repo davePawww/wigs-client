@@ -49,7 +49,7 @@ export default function ForgotPassword() {
   return (
     <div className="min-w-[400px] rounded-md border border-zinc-200/40 bg-zinc-950/95 p-8 shadow-lg">
       <div className="mb-8 flex flex-col gap-4">
-        <h1 className="text-center text-3xl text-white">appName</h1>
+        <h1 className="text-center text-3xl text-white">WIGS</h1>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">

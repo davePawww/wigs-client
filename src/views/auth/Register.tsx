@@ -66,7 +66,7 @@ export default function Register() {
     <div className="max-w-[450px] rounded-md border border-zinc-200/40 bg-zinc-950/95 p-8 shadow-lg">
       <div className="mb-8 flex flex-col gap-4">
         <h1 className="text-center text-3xl text-white">
-          Create an appName account
+          Create a WIGS account
         </h1>
         <p className="text-sm text-zinc-200/40">
           Lorem ipsum dolor sit amet consectetur, adipisicing elit. Maxime esse
