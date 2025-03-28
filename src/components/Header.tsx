@@ -8,9 +8,10 @@ import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function Header() {
   const dispatch = useDispatch<AppDispatch>();
-  // const status = useSelector(getStatus);
-  // const error = useSelector(getError);
   const navigate = useNavigate();
+
+  // TODO
+  // Update the header to have a navigation menu
 
   const handleLogout = async () => {
     try {
