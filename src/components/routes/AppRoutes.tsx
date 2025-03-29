@@ -3,9 +3,12 @@ import MainLayout from "../layouts/MainLayout";
 import { lazy } from "react";
 import { Route, Routes } from "react-router-dom";
 
+// Main pages
 const Wigs = lazy(() => import("@/views/wigs/Wigs"));
 const HabitTracker = lazy(() => import("@/views/habit-tracker/HabitTracker"));
 const Pomodoro = lazy(() => import("@/views/pomodoro/Pomodoro"));
+
+// Auth pages
 const Login = lazy(() => import("@/views/auth/Login"));
 const Register = lazy(() => import("@/views/auth/Register"));
 const VerifyEmail = lazy(() => import("@/views/auth/VerifyEmail"));
