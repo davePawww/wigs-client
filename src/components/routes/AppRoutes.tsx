@@ -7,6 +7,9 @@ import { Route, Routes } from "react-router-dom";
 const Wigs = lazy(() => import("@/views/wigs/Wigs"));
 const HabitTracker = lazy(() => import("@/views/habit-tracker/HabitTracker"));
 const Pomodoro = lazy(() => import("@/views/pomodoro/Pomodoro"));
+const Docs = lazy(() => import("@/views/docs/Docs"));
+const Settings = lazy(() => import("@/views/settings/Settings"));
+const Profile = lazy(() => import("@/views/profile/Profile"));
 
 // Auth pages
 const Login = lazy(() => import("@/views/auth/Login"));
@@ -22,6 +25,9 @@ export default function AppRoutes() {
         <Route index path="/" element={<Wigs />} />
         <Route path="/habit-tracker" element={<HabitTracker />} />
         <Route path="/pomodoro" element={<Pomodoro />} />
+        <Route path="/documentation" element={<Docs />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/profile" element={<Profile />} />
       </Route>
 
       {/* Public Routes */}
