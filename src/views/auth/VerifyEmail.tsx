@@ -1,3 +1,5 @@
+import ErrorMessage from "@/components/ErrorMessage";
+import Spinner from "@/components/Spinner";
 import { Button } from "@/components/ui/button";
 import {
   InputOTP,
@@ -69,9 +71,17 @@ export default function VerifyEmail() {
             variant="default"
             className="mx-auto cursor-pointer bg-blue-600 hover:bg-blue-800"
           >
-            Verify Email
+            {status === "loading" ? (
+              <>
+                <Spinner className="border-blue-200 border-t-blue-600" />
+                <p>Verifying ...</p>
+              </>
+            ) : (
+              <p>Verify Email</p>
+            )}
           </Button>
-          {error && <p className="text-red-500">{error}</p>}
+
+          <ErrorMessage error={error} />
         </form>
       </div>
     </div>

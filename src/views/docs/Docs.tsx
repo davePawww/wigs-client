@@ -1,3 +1,5 @@
+import DocsCard from "@/components/DocsCard";
+
 export default function Docs() {
   return (
     <div className="flex max-w-2xl flex-col gap-6">
@@ -17,32 +19,26 @@ export default function Docs() {
         </p>
       </div>
 
-      <div className="space-y-1">
-        <h1 className="text-xl tracking-wide">WIGS</h1>
-        <p className="text-sm text-white/80">
-          WIGS is short for Wildly Important Goals. This aims to focus on the 3
-          to 4 most important goals you need to finish within the day.
-        </p>
-      </div>
+      <DocsCard
+        title="WIGS"
+        description="WIGS is short for Wildly Important Goals. This aims to focus on the 3
+          to 4 most important goals you need to finish within the day."
+      />
 
-      <div className="space-y-1">
-        <h1 className="text-xl tracking-wide">Habit Tracker</h1>
-        <p className="text-sm text-white/80">
-          It is said that in order to create a habit you need to do the thing
+      <DocsCard
+        title="Habit Tracker"
+        description="It is said that in order to create a habit you need to do the thing
           you want to build for 63 days. This could help tracking the habits you
-          want to build.
-        </p>
-      </div>
+          want to build."
+      />
 
-      <div className="space-y-1">
-        <h1 className="text-xl tracking-wide">Pomodoro</h1>
-        <p className="text-sm text-white/80">
-          Pomodoro is a time management technique that uses a timer to break
+      <DocsCard
+        title="Pomodoro"
+        description="Pomodoro is a time management technique that uses a timer to break
           down work into intervals, traditionally 25 minutes in length,
           separated by short breaks. Get more done by allowing yourself to be
-          distracted.
-        </p>
-      </div>
+          distracted."
+      />
     </div>
   );
 }

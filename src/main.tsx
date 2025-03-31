@@ -17,9 +17,7 @@ createRoot(document.getElementById("root")!).render(
     <Provider store={store}>
       <StrictMode>
         <BrowserRouter>
-          {/* <Suspense fallback={<div>Loading...</div>}> */}
           <AppRoutes />
-          {/* </Suspense> */}
         </BrowserRouter>
         <Toaster />
       </StrictMode>
