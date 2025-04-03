@@ -1,3 +1,4 @@
+import { getItem, setItem } from "@/lib/utils";
 import {
   getError,
   getStatus,
@@ -5,7 +6,7 @@ import {
   isAuthenticated,
 } from "@/redux/slices/authSlice";
 import { AppDispatch } from "@/redux/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export const useCheckAuth = () => {
@@ -23,4 +24,17 @@ export const useCheckAuth = () => {
   }, [dispatch]);
 
   return { user, status, error };
+};
+
+export const usePersistedState = <T>(key: string, initialValue: T) => {
+  const [value, setValue] = useState(() => {
+    const item = getItem(key);
+    return (item as T) || initialValue;
+  });
+
+  useEffect(() => {
+    setItem(key, value);
+  }, [key, value]);
+
+  return [value, setValue] as const;
 };

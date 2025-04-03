@@ -37,3 +37,20 @@ export const handleAsyncThunk = <Returned, ThunkArg>(
       state.error = action.payload as string;
     });
 };
+
+export const getItem = (key: string) => {
+  try {
+    const item = window.localStorage.getItem(key);
+    return item ? JSON.parse(item) : null;
+  } catch (error) {
+    console.log("Error getting item from localStorage", error);
+  }
+};
+
+export const setItem = (key: string, value: unknown) => {
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.log("Error setting item to localStorage", error);
+  }
+};
