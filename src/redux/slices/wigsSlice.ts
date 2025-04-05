@@ -23,7 +23,7 @@ const initialState: WigsState = {
 
 export const fetchWigs = createAsyncThunk(
   "wigs/fetchWigs",
-  async (id: string, { rejectWithValue }) => {
+  async (id: string | undefined, { rejectWithValue }) => {
     return getApi(`/wigs/findById?id=${id}`, rejectWithValue);
   },
 );

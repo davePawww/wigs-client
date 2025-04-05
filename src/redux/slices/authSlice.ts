@@ -4,7 +4,7 @@ import { handleAsyncThunk } from "@/lib/utils";
 import { getApi, postApi } from "@/lib/api";
 
 export interface IUser {
-  _id: string;
+  _id?: string;
   name?: string;
   email: string;
   password: string;
