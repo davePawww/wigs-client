@@ -1,54 +1,66 @@
-// import { useCheckAuth } from "@/hooks/hooks";
-
 import ErrorMessage from "@/components/ErrorMessage";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { usePersistedState } from "@/hooks/hooks";
-import { useState } from "react";
+import { useCheckAuth } from "@/hooks/hooks";
+import { getItem } from "@/lib/utils";
+import { fetchWigs } from "@/redux/slices/wigsSlice";
+import { AppDispatch } from "@/redux/store";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useEffect, useState } from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 
 const initialWigs = [
   {
-    id: "1",
+    _id: uuidv4(),
     description: "Gym",
     completed: true,
   },
   {
-    id: "2",
+    _id: uuidv4(),
     description: "Code",
     completed: false,
   },
   {
-    id: "3",
+    _id: uuidv4(),
     description: "Read",
     completed: true,
   },
 ];
 
 interface Wigs {
-  id: string;
+  _id: string;
   description: string;
   completed: boolean;
 }
 
 export default function Wigs() {
-  // const { user } = useCheckAuth();
-  // const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (status === "success" || status === "error") {
-  //     if (!user) {
-  //       navigate("/auth/login", { replace: true });
-  //     }
-  //   }
-  // }, [user, navigate, status]);
-
-  const [wigs, setWigs] = usePersistedState<Wigs[]>("wigs", initialWigs);
+  const { user } = useCheckAuth();
+  const dispatch = useDispatch<AppDispatch>();
+  const [wigs, setWigs] = useState<Wigs[]>([]);
   const [newWigs, setNewWigs] = useState("");
   const [hoverId, setHoverId] = useState<string | null>(null);
   const [error, setError] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        await dispatch(fetchWigs(user._id))
+          .then(unwrapResult)
+          .then((result) => {
+            if (result.success) {
+              setWigs(result.wigs);
+            }
+          });
+      } else {
+        setWigs(getItem("wigs") || initialWigs);
+      }
+    };
+
+    fetchData();
+  }, [setWigs, user, dispatch]);
 
   const handleCreateWig = () => {
     if (wigs.length === 4) {
@@ -62,7 +74,7 @@ export default function Wigs() {
     }
 
     const newWig = {
-      id: uuidv4(),
+      _id: uuidv4(),
       description: newWigs,
       completed: false,
     };
@@ -79,7 +91,7 @@ export default function Wigs() {
   const handleUpdateWig = (id: string, updatedWig: string) => {
     setWigs((prev) =>
       prev.map((wig) =>
-        wig.id === id ? { ...wig, description: updatedWig.trim() } : wig,
+        wig._id === id ? { ...wig, description: updatedWig.trim() } : wig,
       ),
     );
     setError(undefined);
@@ -89,7 +101,7 @@ export default function Wigs() {
     setWigs((prev) =>
       prev
         .map((wig) =>
-          wig.id === id ? { ...wig, completed: !wig.completed } : wig,
+          wig._id === id ? { ...wig, completed: !wig.completed } : wig,
         )
         .sort((a, b) => Number(a.completed) - Number(b.completed)),
     );
@@ -97,7 +109,7 @@ export default function Wigs() {
   };
 
   const handleRemoveWig = (id: string) => {
-    setWigs((prev) => prev.filter((wig) => wig.id !== id));
+    setWigs((prev) => prev.filter((wig) => wig._id !== id));
     setError(undefined);
   };
 
@@ -125,17 +137,18 @@ export default function Wigs() {
 
         <section className="flex flex-col gap-3 px-2">
           {wigs.map((wig) => {
+            console.log(wig);
             return (
               <div
+                key={wig._id}
                 className="flex items-center space-x-2"
-                key={wig.id}
-                onMouseEnter={() => setHoverId(wig.id)}
+                onMouseEnter={() => setHoverId(wig._id)}
                 onMouseLeave={() => setHoverId(null)}
               >
                 <Checkbox
-                  id={wig.id.toString()}
+                  id={wig._id}
                   checked={wig.completed}
-                  onCheckedChange={() => handleCheckboxChange(wig.id)}
+                  onCheckedChange={() => handleCheckboxChange(wig._id)}
                   className="data-[state=checked]:border-white/10 data-[state=checked]:bg-blue-600"
                 />
                 <Input
@@ -143,11 +156,11 @@ export default function Wigs() {
                   type="text"
                   value={wig.description}
                   className={`border-none ${wig.completed && "line-through"}`}
-                  onChange={(e) => handleUpdateWig(wig.id, e.target.value)}
+                  onChange={(e) => handleUpdateWig(wig._id, e.target.value)}
                 />
-                {hoverId === wig.id && (
+                {hoverId === wig._id && (
                   <FaRegTrashCan
-                    onClick={() => handleRemoveWig(wig.id)}
+                    onClick={() => handleRemoveWig(wig._id)}
                     className="cursor-pointer text-red-500/50 transition-transform duration-200 ease-in-out hover:scale-110"
                   />
                 )}

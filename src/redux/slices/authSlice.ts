@@ -4,6 +4,7 @@ import { handleAsyncThunk } from "@/lib/utils";
 import { getApi, postApi } from "@/lib/api";
 
 export interface IUser {
+  _id: string;
   name?: string;
   email: string;
   password: string;
@@ -91,7 +92,11 @@ export const resetPassword = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    resetError(state) {
+      state.error = undefined;
+    },
+  },
   extraReducers: (builder) => {
     handleAsyncThunk(builder, register, (state, action) => {
       state.user = action.payload.user;
@@ -113,6 +118,7 @@ const authSlice = createSlice({
   },
 });
 
+export const { resetError } = authSlice.actions;
 export const getUser = (state: RootState) => state.auth.user;
 export const getStatus = (state: RootState) => state.auth.status;
 export const getError = (state: RootState) => state.auth.error;

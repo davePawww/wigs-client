@@ -1,7 +1,7 @@
-import { AuthState } from "@/redux/slices/authSlice";
 import {
   ActionReducerMapBuilder,
   AsyncThunk,
+  Draft,
   PayloadAction,
 } from "@reduxjs/toolkit";
 import { AxiosError } from "axios";
@@ -17,14 +17,24 @@ export const handleAxiosError = (error: unknown) => {
   return axiosError.response?.data.message || "An unexpected error occurred";
 };
 
-export const handleAsyncThunk = <Returned, ThunkArg>(
-  builder: ActionReducerMapBuilder<AuthState>,
+interface AsyncStatusState {
+  status: "idle" | "loading" | "success" | "error";
+  error: string | undefined;
+}
+
+export const handleAsyncThunk = <
+  State extends AsyncStatusState,
+  Returned,
+  ThunkArg,
+>(
+  builder: ActionReducerMapBuilder<State>,
   asyncThunk: AsyncThunk<Returned, ThunkArg, object>,
-  onSuccess?: (state: AuthState, action: PayloadAction<Returned>) => void,
+  onSuccess?: (state: Draft<State>, action: PayloadAction<Returned>) => void,
 ) => {
   builder
     .addCase(asyncThunk.pending, (state) => {
       state.status = "loading";
+      state.error = undefined;
     })
     .addCase(asyncThunk.fulfilled, (state, action) => {
       state.status = "success";
