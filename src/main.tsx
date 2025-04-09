@@ -9,18 +9,21 @@ import Fallback from "@/components/Fallback";
 import { Toaster } from "@/components/ui/sonner";
 
 import { Provider } from "react-redux";
-import { store } from "@/redux/store";
+import { persistor, store } from "@/redux/store";
 import { ErrorBoundary } from "react-error-boundary";
+import { PersistGate } from "redux-persist/integration/react";
 
 createRoot(document.getElementById("root")!).render(
   <ErrorBoundary FallbackComponent={Fallback}>
     <Provider store={store}>
-      <StrictMode>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-        <Toaster />
-      </StrictMode>
+      <PersistGate loading={<div>Loading...</div>} persistor={persistor}>
+        <StrictMode>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+          <Toaster />
+        </StrictMode>
+      </PersistGate>
     </Provider>
   </ErrorBoundary>,
 );

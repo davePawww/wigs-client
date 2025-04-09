@@ -1,10 +1,11 @@
-import { useCheckAuth } from "@/hooks/hooks";
 import NavBar from "@/components/navigation/NavBar";
 import UserIconDropdown from "./navigation/UserIconDropdown";
 import LoginBtn from "./navigation/LoginBtn";
+import { useSelector } from "react-redux";
+import { getUser } from "@/redux/slices/authSlice";
 
 export default function Header() {
-  const { user } = useCheckAuth();
+  const user = useSelector(getUser);
 
   return (
     <header className="flex items-center justify-between bg-neutral-800 p-4 text-white md:px-8">
