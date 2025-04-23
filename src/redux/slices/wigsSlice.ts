@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "@/redux/store";
-import { getApi } from "@/lib/api";
+import { getApi, postApi, putApi, deleteApi } from "@/lib/api";
 import { handleAsyncThunk } from "@/lib/utils";
 import { v4 as uuidv4 } from "uuid";
 
@@ -29,13 +29,15 @@ export interface IWigs {
 }
 
 export interface WigsState {
-  wigs: IWigs[] | undefined;
+  authenticatedData: IWigs[] | undefined;
+  unAuthenticatedData: IWigs[] | undefined;
   status: "idle" | "loading" | "success" | "error";
   error: string | undefined;
 }
 
 const initialState: WigsState = {
-  wigs: initialWigs,
+  authenticatedData: undefined,
+  unAuthenticatedData: initialWigs,
   status: "idle", // 'idle', 'loading', 'success', 'error'
   error: undefined,
 };
@@ -47,27 +49,52 @@ export const getUserWigs = createAsyncThunk(
   },
 );
 
+export const createWigAsync = createAsyncThunk(
+  "wigs/createWig",
+  async (wig: IWigs, { rejectWithValue }) => {
+    return postApi("/wigs/createWig", wig, rejectWithValue);
+  },
+);
+
+export const saveUpdatedWigAsync = createAsyncThunk(
+  "wigs/updateWig",
+  async (wig: IWigs, { rejectWithValue }) => {
+    return putApi("/wigs/updateWig", wig, rejectWithValue);
+  },
+);
+
+export const deleteWigAsync = createAsyncThunk(
+  "wigs/deleteWig",
+  async (wigId: string, { rejectWithValue }) => {
+    return deleteApi(`/wigs/deleteWig/${wigId}`, wigId, rejectWithValue);
+  },
+);
+
+const sortWigs = (wigs: IWigs[]) => {
+  return wigs.sort((a, b) => Number(a.completed) - Number(b.completed));
+};
+
 const wigsSlice = createSlice({
   name: "wigs",
   initialState,
   reducers: {
     createWig(state, action: PayloadAction<IWigs>) {
-      state.wigs?.push(action.payload);
+      state.unAuthenticatedData?.push(action.payload);
     },
     updateWig(state, action: PayloadAction<IWigs>) {
       const { _id, description, completed } = action.payload;
-      const wig = state.wigs?.find((wig) => wig._id === _id);
-
+      const wig = state.unAuthenticatedData?.find((wig) => wig._id === _id);
       if (wig) {
         if (description !== undefined) wig.description = description;
         if (completed !== undefined) wig.completed = completed;
       }
-
-      state.wigs?.sort((a, b) => Number(a.completed) - Number(b.completed));
+      state.unAuthenticatedData = sortWigs(state.unAuthenticatedData || []);
     },
     removeWig(state, action: PayloadAction<string>) {
       const wigId = action.payload;
-      state.wigs = state.wigs?.filter((wig) => wig._id !== wigId);
+      state.unAuthenticatedData = state.unAuthenticatedData?.filter(
+        (wig) => wig._id !== wigId,
+      );
     },
     setError(state, action: PayloadAction<string | undefined>) {
       state.error = action.payload;
@@ -75,17 +102,59 @@ const wigsSlice = createSlice({
     clearError(state) {
       state.error = undefined;
     },
+    updateWigAsync(state, action: PayloadAction<IWigs>) {
+      const { _id, description, completed } = action.payload;
+      const wig = state.authenticatedData?.find((wig) => wig._id === _id);
+      if (wig) {
+        if (description !== undefined) wig.description = description;
+        if (completed !== undefined) wig.completed = completed;
+      }
+      state.authenticatedData?.sort(
+        (a, b) => Number(a.completed) - Number(b.completed),
+      );
+    },
   },
   extraReducers: (builder) => {
     handleAsyncThunk(builder, getUserWigs, (state, action) => {
-      state.wigs = action.payload.wigs;
+      state.authenticatedData = sortWigs(action.payload.wigs);
+    });
+    handleAsyncThunk(builder, createWigAsync, (state, action) => {
+      state.authenticatedData?.push(action.payload);
+    });
+    handleAsyncThunk(builder, saveUpdatedWigAsync, (state, action) => {
+      state.authenticatedData = state.authenticatedData?.map((wig) => {
+        if (wig._id === action.payload._id) {
+          return {
+            ...wig,
+            description: action.payload.description,
+            completed: action.payload.completed,
+          };
+        }
+        return wig;
+      });
+      state.authenticatedData = sortWigs(state.authenticatedData || []);
+    });
+    handleAsyncThunk(builder, deleteWigAsync, (state, action) => {
+      const wigId = action.payload._id;
+      state.authenticatedData = state.authenticatedData?.filter(
+        (wig) => wig._id !== wigId,
+      );
     });
   },
 });
 
-export const { createWig, updateWig, removeWig, setError, clearError } =
-  wigsSlice.actions;
-export const getWigs = (state: RootState) => state.wigs.wigs;
+export const {
+  createWig,
+  updateWig,
+  removeWig,
+  setError,
+  clearError,
+  updateWigAsync,
+} = wigsSlice.actions;
+export const getUnauthenticatedWigs = (state: RootState) =>
+  state.wigs.unAuthenticatedData;
+export const getAuthenticatedWigs = (state: RootState) =>
+  state.wigs.authenticatedData;
 export const getStatus = (state: RootState) => state.wigs.status;
 export const getError = (state: RootState) => state.wigs.error;
 
