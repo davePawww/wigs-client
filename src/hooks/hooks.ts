@@ -50,6 +50,7 @@ export const useWigsStore = () => {
   const dispatchAction = async (action: any) => {
     dispatch(clearError());
     await dispatch(action);
+    // TODO: I'm thinking instead of re-fetching the data again. We could just update the global state instead.
     if (user) await dispatch(getUserWigs());
   };
 
@@ -87,6 +88,7 @@ export const useWigsStore = () => {
     dispatch(user ? updateWigAsync(updatedWig) : updateWig(updatedWig));
     if (user) {
       await dispatch(saveUpdatedWigAsync(updatedWig));
+      // TODO: I'm thinking instead of re-fetching the data again. We could just update the global state instead.
       await dispatch(getUserWigs());
     }
   };

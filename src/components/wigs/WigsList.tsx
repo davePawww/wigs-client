@@ -28,7 +28,7 @@ export default function WigsList() {
     <>
       {wigsData?.length !== 0 &&
         wigsData?.map((wig) => (
-          <div key={wig._id} className="flex items-center space-x-2">
+          <div key={wig._id} className="flex items-center space-x-5">
             <Checkbox
               id={wig._id}
               checked={wig.completed}
@@ -46,7 +46,10 @@ export default function WigsList() {
                   className={`border-none ${wig.completed && "line-through"}`}
                   onChange={(e) => handleInputChange(wig, e.target.value)}
                 />
-                <FaRegFloppyDisk onClick={() => handleUpdate(wig)} />
+                <FaRegFloppyDisk
+                  onClick={() => handleUpdate(wig)}
+                  className="cursor-pointer transition-transform duration-200 ease-in-out hover:scale-150"
+                />
               </>
             ) : (
               <>
@@ -55,13 +58,16 @@ export default function WigsList() {
                 >
                   {wig.description}
                 </p>
-                <FaPencil onClick={() => handleEdit(wig._id)} />
+                <FaPencil
+                  onClick={() => handleEdit(wig._id)}
+                  className="cursor-pointer transition-transform duration-200 ease-in-out hover:scale-150"
+                />
               </>
             )}
 
             <FaRegTrashCan
               onClick={() => handleRemoveWig(wig._id)}
-              className="cursor-pointer text-red-500/50 transition-transform duration-200 ease-in-out hover:scale-120"
+              className="cursor-pointer text-red-500/50 transition-transform duration-200 ease-in-out hover:scale-150"
             />
           </div>
         ))}

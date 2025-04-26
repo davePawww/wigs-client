@@ -16,12 +16,11 @@ export default function LoginBtn() {
 
   return (
     <Button
-      variant={"default"}
-      className="cursor-pointer bg-neutral-200 text-black hover:scale-105 hover:bg-neutral-400"
+      className="cursor-pointer border border-indigo-300/10 shadow-[0_0_15px_0_rgba(75,0,130,0.5)]"
       onClick={handleNavigate}
     >
       <RiLoginBoxLine />
-      Login
+      <p className="text-xs">Login</p>
     </Button>
   );
 }
