@@ -5,7 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import { useCheckAuth } from "@/hooks/hooks";
 
 // Main pages
-const Wigs = lazy(() => import("@/views/wigs/Wigs"));
+const Wigs = lazy(() => import("@/views/wigs/VWigs"));
 const HabitTracker = lazy(() => import("@/views/habit-tracker/HabitTracker"));
 const Pomodoro = lazy(() => import("@/views/pomodoro/Pomodoro"));
 const Docs = lazy(() => import("@/views/docs/Docs"));
