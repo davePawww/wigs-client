@@ -56,7 +56,11 @@ export const useWigsStore = () => {
 
   const handleCreateWig = () => {
     if (wigsData?.length === MAX_WIGS) {
-      dispatch(setError("You can only have 4 WIGS"));
+      dispatch(
+        setError(
+          "You can only have 4 WIGS. Pick the tasks that you absolutely need to finish for the day. So you can focus on the most important ones.",
+        ),
+      );
       return;
     }
 

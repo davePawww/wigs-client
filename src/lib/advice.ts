@@ -140,5 +140,6 @@ const productivityTips = [
 
 export const getRandomTip = () => {
   const randomIndex = Math.floor(Math.random() * productivityTips.length);
-  return productivityTips[randomIndex];
+  const { author, quote } = productivityTips[randomIndex];
+  return { author, quote };
 };
